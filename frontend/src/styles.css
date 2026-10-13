@@ -1,0 +1,114 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --font-sans: "Montserrat", "IBM Plex Sans Arabic", system-ui, -apple-system, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Montserrat", system-ui, sans-serif;
+
+  --color-expo-green: #006c35;
+  --color-expo-green-light: #4fb480;
+  --color-expo-gold: #fab712;
+  --color-expo-gold-light: #ffee9b;
+  --color-expo-blue: #1e87bd;
+  --color-expo-purple: #47266c;
+  --color-expo-purple-light: #95629e;
+  --color-expo-teal: #08b0a0;
+  --color-expo-teal-light: #8bcab3;
+  --color-expo-red: #e8431b;
+  --color-expo-orange: #f1881d;
+  --color-ink: #12121a;
+  --color-ink-soft: #4a4a57;
+  --color-mist: #f4f5f7;
+  --color-line: #e6e8ec;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[dir="rtl"] body,
+[dir="rtl"] .font-sans {
+  font-family: var(--font-arabic);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.card {
+  background: #fff;
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 10px 30px -18px rgba(18, 18, 26, 0.35);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s ease-out both;
+}

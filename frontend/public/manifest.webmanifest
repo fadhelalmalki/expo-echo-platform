@@ -1,0 +1,16 @@
+{
+  "name": "Expo Echo",
+  "short_name": "Expo Echo",
+  "description": "AI-powered event recommendations for Expo 2030 Riyadh",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f5f7",
+  "theme_color": "#006C35",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
