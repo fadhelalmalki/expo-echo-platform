@@ -8,6 +8,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
   ar: {
     brand: 'إكسبو إيكو',
     tagline: 'رفيقك الذكي في إكسبو 2030 الرياض',
+    'app.logoAlt': 'شعار إكسبو إيكو',
     appName: 'إكسبو إيكو',
 
     'nav.feed': 'لك',
@@ -16,6 +17,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'nav.profile': 'حسابي',
 
     'onboarding.welcome': 'أهلاً بك في إكسبو 2030 الرياض',
+    'onboarding.chooseLanguage': 'اختر لغتك',
     'onboarding.subtitle': 'أخبرنا عن اهتماماتك لنقترح لك أفضل الفعاليات القريبة منك الآن.',
     'onboarding.yourName': 'اسمك',
     'onboarding.namePlaceholder': 'اكتب اسمك',
@@ -128,6 +130,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
   en: {
     brand: 'Expo Echo',
     tagline: 'Your smart companion at Expo 2030 Riyadh',
+    'app.logoAlt': 'Expo Echo logo',
     appName: 'Expo Echo',
 
     'nav.feed': 'For You',
@@ -136,6 +139,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'nav.profile': 'Profile',
 
     'onboarding.welcome': 'Welcome to Expo 2030 Riyadh',
+    'onboarding.chooseLanguage': 'Choose your language',
     'onboarding.subtitle': "Tell us your interests and we'll suggest the best events near you right now.",
     'onboarding.yourName': 'Your name',
     'onboarding.namePlaceholder': 'Enter your name',
@@ -274,7 +278,11 @@ export class I18nService {
 
   private initialLang(): Lang {
     const stored = localStorage.getItem('expoecho.lang');
-    return stored === 'en' ? 'en' : 'ar';
+    if (stored === 'ar' || stored === 'en') {
+      return stored;
+    }
+    const browser = typeof navigator !== 'undefined' ? navigator.language?.toLowerCase() ?? '' : '';
+    return browser.startsWith('ar') ? 'ar' : 'en';
   }
 
   private applyToDocument(): void {

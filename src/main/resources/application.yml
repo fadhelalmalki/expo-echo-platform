@@ -2,7 +2,7 @@ spring:
   application:
     name: expo-echo-platform
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: ${SPRING_PROFILES_ACTIVE:prod}
   jpa:
     open-in-view: false
     hibernate:
@@ -33,7 +33,7 @@ management:
 
 app:
   ai:
-    enabled: ${AI_ENABLED:false}
+    enabled: ${AI_ENABLED:true}
   site:
     center-lat: ${SITE_CENTER_LAT:24.7690}
     center-lng: ${SITE_CENTER_LNG:46.6580}

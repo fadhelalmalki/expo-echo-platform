@@ -1,3 +1,5 @@
+![Expo Echo](./banner.jpg)
+
 # 🌴 Expo Echo — AI-Powered Event Recommendation Engine
 
 > Digital Challenge **1.3** — *"The difficulty of discovering and selecting suitable events
@@ -159,9 +161,24 @@ Health check: `GET /actuator/health`.
 
 ## 🎨 Brand
 
-Palette from the official **Expo 2030 Riyadh** brand guidelines:
+The UI is bilingual and swaps the logo automatically with the language:
 
-`Nature #006C35→#4FB480` · `Art #FAB712→#FFEE9B` · `Architecture #1E87BD` ·
-`Technology #47266C→#95629E` · `Science #08B0A0→#8BCAB3` · `Tradition #E8431B→#F1881D`
+- `frontend/public/ar-logo.png` — shown when the app is in **Arabic (RTL)**
+- `frontend/public/en-logo.png` — shown when the app is in **English (LTR)**
+
+Palette enhanced from the **Expo 2030 Riyadh** identity:
+
+| Token | Hex | Use |
+|---|---|---|
+| `primary-green` | `#006C35` | Primary brand |
+| `ai-teal` | `#08B0A0` | AI accents |
+| `tech-purple` | `#47266C` | Technology |
+| `arch-blue` | `#1E87BD` | Architecture |
+| `match-gold` | `#FAB712` | Match score |
+| `success-green` | `#4FB480` | Success |
+| `alert-orange` | `#E8431B` | Alerts / imminent |
+
+Gradients: `brand-underline` (`#47266C → #08B0A0 → #1E87BD`) and `logo-pin`
+(`#006C35 → #08B0A0`). Surfaces stay light-balanced (`--bg-app #f5f7f9`), not pure white or dark.
 
 Typography: Montserrat (Latin) + IBM Plex Sans Arabic (Arabic/RTL).

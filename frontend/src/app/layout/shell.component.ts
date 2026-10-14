@@ -13,16 +13,7 @@ import { initials } from '../shared/format';
       <header class="glass safe-top sticky top-0 z-40 border-b border-line/70">
         <div class="flex items-center justify-between px-4 py-3">
           <a routerLink="/feed" class="flex items-center gap-2.5">
-            <span
-              class="flex h-10 w-10 items-center justify-center rounded-2xl text-lg font-black text-white shadow-md"
-              style="background: linear-gradient(135deg, #006c35, #4fb480 55%, #fab712)"
-            >
-              🌴
-            </span>
-            <span class="leading-tight">
-              <span class="block text-base font-extrabold">{{ i18n.t('brand') }}</span>
-              <span class="block text-[11px] font-medium text-ink-soft">{{ i18n.t('tagline') }}</span>
-            </span>
+            <img [src]="logoUrl()" [alt]="i18n.t('app.logoAlt')" class="h-12 w-auto max-w-[60%]" />
           </a>
           <div class="flex items-center gap-2">
             <button
@@ -32,13 +23,14 @@ import { initials } from '../shared/format';
             >
               {{ i18n.lang() === 'ar' ? 'EN' : 'AR' }}
             </button>
-            <span
-              class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
+            <a
+              routerLink="/profile"
+              class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm ring-1 ring-black/10 transition hover:scale-105"
               style="background: linear-gradient(135deg, #47266c, #95629e)"
               [title]="profile.visitor()?.displayName ?? ''"
             >
               {{ avatar() }}
-            </span>
+            </a>
           </div>
         </div>
       </header>
@@ -68,6 +60,8 @@ import { initials } from '../shared/format';
 export class ShellComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly profile = inject(ProfileService);
+
+  protected readonly logoUrl = computed(() => (this.i18n.lang() === 'ar' ? 'ar-logo.png' : 'en-logo.png'));
 
   protected readonly avatar = computed(() => {
     const name = this.profile.visitor()?.displayName;

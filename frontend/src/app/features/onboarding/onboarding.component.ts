@@ -11,13 +11,34 @@ import { categoryEmoji } from '../../shared/format';
   standalone: true,
   template: `
     <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-5 pb-10 pt-10 safe-top">
-      <div class="animate-slide-up">
-        <span
-          class="flex h-16 w-16 items-center justify-center rounded-3xl text-3xl shadow-lg"
-          style="background: linear-gradient(135deg, #006c35, #4fb480 55%, #fab712)"
-        >
-          🌴
-        </span>
+      <div class="mb-7 flex flex-col items-center gap-2">
+        <span class="text-xs font-bold uppercase tracking-wide text-ink-soft/70">{{
+          i18n.t('onboarding.chooseLanguage')
+        }}</span>
+        <div class="inline-flex overflow-hidden rounded-full border border-line bg-white p-1 shadow-sm">
+          <button
+            type="button"
+            (click)="i18n.setLang('ar')"
+            [attr.aria-pressed]="i18n.lang() === 'ar'"
+            class="rounded-full px-5 py-2 text-sm font-extrabold transition"
+            [class]="i18n.lang() === 'ar' ? 'bg-expo-green text-white' : 'text-ink-soft'"
+          >
+            {{ i18n.t('common.arabic') }}
+          </button>
+          <button
+            type="button"
+            (click)="i18n.setLang('en')"
+            [attr.aria-pressed]="i18n.lang() === 'en'"
+            class="rounded-full px-5 py-2 text-sm font-extrabold transition"
+            [class]="i18n.lang() === 'en' ? 'bg-expo-green text-white' : 'text-ink-soft'"
+          >
+            {{ i18n.t('common.english') }}
+          </button>
+        </div>
+      </div>
+
+      <div class="animate-slide-up text-center">
+        <img [src]="logoUrl()" [alt]="i18n.t('app.logoAlt')" class="mx-auto h-24 max-w-full w-auto" />
         <h1 class="mt-5 text-3xl font-black leading-tight">{{ i18n.t('onboarding.welcome') }}</h1>
         <p class="mt-2 text-sm text-ink-soft">{{ i18n.t('onboarding.subtitle') }}</p>
       </div>
@@ -143,6 +164,7 @@ export class OnboardingComponent {
   protected readonly usingRealLocation = signal(false);
   protected readonly locating = signal(false);
   protected readonly submitting = signal(false);
+  protected readonly logoUrl = computed(() => (this.i18n.lang() === 'ar' ? 'ar-logo.png' : 'en-logo.png'));
   protected readonly error = signal('');
   private coords = signal<{ lat: number; lng: number } | null>(null);
 

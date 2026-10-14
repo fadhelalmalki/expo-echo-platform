@@ -16,7 +16,7 @@ import { EventCardComponent } from '../../shared/event-card.component';
       <h1 class="text-2xl font-black">{{ i18n.t('feed.title') }}</h1>
       <p class="mt-0.5 text-sm text-ink-soft">
         {{ i18n.t('feed.forYou') }}<span class="mx-1">•</span
-        ><span class="font-semibold text-expo-green">{{ visitorName() }}</span>
+        ><a routerLink="/profile" class="font-semibold text-expo-green hover:underline">{{ visitorName() }}</a>
       </p>
     </div>
 
