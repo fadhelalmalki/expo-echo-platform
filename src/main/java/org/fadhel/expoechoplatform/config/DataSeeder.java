@@ -8,6 +8,7 @@ import org.fadhel.expoechoplatform.domain.Venue;
 import org.fadhel.expoechoplatform.repository.CategoryRepository;
 import org.fadhel.expoechoplatform.repository.EventRepository;
 import org.fadhel.expoechoplatform.repository.VenueRepository;
+import org.fadhel.expoechoplatform.util.GeoUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
