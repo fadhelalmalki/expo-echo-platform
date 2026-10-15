@@ -1,7 +1,8 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { I18nService } from '../../core/i18n.service';
+import { NotificationService } from '../../core/notification.service';
 import { ProfileService } from '../../core/profile.service';
 import { ToastService } from '../../core/toast.service';
 import { EventCard } from '../../core/models';
@@ -20,7 +21,7 @@ import { EventCardComponent } from '../../shared/event-card.component';
       </p>
     </div>
 
-    <div class="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+    <div class="mt-4 flex flex-wrap items-center gap-2 pb-1">
       <span class="shrink-0 text-xs font-bold text-ink-soft">{{ i18n.t('feed.timeWindow') }}:</span>
       @for (option of timeOptions; track option) {
         <button
@@ -42,6 +43,18 @@ import { EventCardComponent } from '../../shared/event-card.component';
         class="ms-auto shrink-0 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-ink-soft"
       >
         ↻ {{ i18n.t('feed.refresh') }}
+      </button>
+      <button
+        type="button"
+        (click)="reset()"
+        class="shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold transition"
+        [class]="
+          confirmReset()
+            ? 'border-expo-red bg-expo-red text-white'
+            : 'border-expo-red/40 bg-white text-expo-red'
+        "
+      >
+        {{ confirmReset() ? i18n.t('feed.resetConfirm') : '↺ ' + i18n.t('feed.reset') }}
       </button>
     </div>
 
@@ -71,10 +84,11 @@ import { EventCardComponent } from '../../shared/event-card.component';
     }
   `,
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent implements OnInit, OnDestroy {
   protected readonly i18n = inject(I18nService);
   protected readonly profile = inject(ProfileService);
   private readonly api = inject(ApiService);
+  private readonly notifications = inject(NotificationService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
 
@@ -82,6 +96,8 @@ export class FeedComponent implements OnInit {
   protected readonly cards = signal<EventCard[]>([]);
   protected readonly loading = signal(true);
   protected readonly timeWindow = signal<number>(30);
+  protected readonly confirmReset = signal(false);
+  private resetTimer?: ReturnType<typeof setTimeout>;
 
   protected readonly visitorName = computed(() => this.profile.visitor()?.displayName ?? '');
 
@@ -160,7 +176,25 @@ export class FeedComponent implements OnInit {
     this.router.navigate(['/events', card.id]);
   }
 
+  protected reset(): void {
+    if (!this.confirmReset()) {
+      this.confirmReset.set(true);
+      clearTimeout(this.resetTimer);
+      this.resetTimer = setTimeout(() => this.confirmReset.set(false), 3000);
+      return;
+    }
+    clearTimeout(this.resetTimer);
+    this.confirmReset.set(false);
+    this.profile.reset();
+    this.notifications.disconnect();
+    this.router.navigateByUrl('/onboarding');
+  }
+
   private updateCard(id: number, patch: (card: EventCard) => EventCard): void {
     this.cards.update((list) => list.map((c) => (c.id === id ? patch(c) : c)));
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.resetTimer);
   }
 }
