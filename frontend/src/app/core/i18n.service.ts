@@ -125,6 +125,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'common.back': 'رجوع',
     'common.arabic': 'العربية',
     'common.english': 'English',
+    'common.language': 'اللغة',
     'common.of': 'من',
   },
   en: {
@@ -247,6 +248,7 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'common.back': 'Back',
     'common.arabic': 'العربية',
     'common.english': 'English',
+    'common.language': 'Language',
     'common.of': 'of',
   },
 };

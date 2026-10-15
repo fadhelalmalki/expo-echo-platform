@@ -4,16 +4,17 @@ import { I18nService } from '../core/i18n.service';
 import { ProfileService } from '../core/profile.service';
 import { logoAsset } from '../shared/brand';
 import { initials } from '../shared/format';
+import { LanguageSwitcherComponent } from '../shared/language-switcher.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, LanguageSwitcherComponent],
   template: `
     <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col bg-mist">
       <header class="glass safe-top sticky top-0 z-40 border-b border-line/70">
-        <div class="flex items-center justify-between px-4 py-3">
-          <a routerLink="/feed" class="flex min-w-0 items-center gap-2.5">
+        <div class="flex items-center gap-2 px-4 py-2.5">
+          <a routerLink="/feed" class="flex min-w-0 items-center me-auto">
             <img
               [src]="logo().src"
               [srcset]="logo().srcset"
@@ -22,26 +23,18 @@ import { initials } from '../shared/format';
               [attr.height]="logo().height"
               [alt]="i18n.t('app.logoAlt')"
               fetchpriority="high"
-              class="h-[clamp(2rem,7vw,3rem)] w-auto min-w-0 max-w-full object-contain"
+              class="h-6 w-auto min-w-0 max-w-full object-contain sm:h-8"
             />
           </a>
-          <div class="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              (click)="i18n.toggle()"
-              class="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-ink-soft"
-            >
-              {{ i18n.lang() === 'ar' ? 'EN' : 'AR' }}
-            </button>
-            <a
-              routerLink="/profile"
-              class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm ring-1 ring-black/10 transition hover:scale-105"
-              style="background: linear-gradient(135deg, #47266c, #95629e)"
-              [title]="profile.visitor()?.displayName ?? ''"
-            >
-              {{ avatar() }}
-            </a>
-          </div>
+          <app-language-switcher class="shrink-0" />
+          <a
+            routerLink="/profile"
+            class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm ring-1 ring-black/10 transition before:absolute before:-inset-1 before:content-[''] hover:scale-105"
+            style="background: linear-gradient(135deg, #47266c, #95629e)"
+            [title]="profile.visitor()?.displayName ?? ''"
+          >
+            {{ avatar() }}
+          </a>
         </div>
       </header>
 
@@ -71,7 +64,7 @@ export class ShellComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly profile = inject(ProfileService);
 
-  protected readonly logo = computed(() => logoAsset(this.i18n.lang(), 'header'));
+  protected readonly logo = computed(() => logoAsset(this.i18n.lang()));
 
   protected readonly avatar = computed(() => {
     const name = this.profile.visitor()?.displayName;

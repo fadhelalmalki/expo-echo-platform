@@ -6,39 +6,15 @@ import { NotificationService } from '../../core/notification.service';
 import { ToastService } from '../../core/toast.service';
 import { logoAsset } from '../../shared/brand';
 import { categoryEmoji } from '../../shared/format';
+import { LanguageSwitcherComponent } from '../../shared/language-switcher.component';
 
 @Component({
   selector: 'app-onboarding',
   standalone: true,
+  imports: [LanguageSwitcherComponent],
   template: `
-    <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-5 pb-10 pt-10 safe-top">
-      <div class="mb-7 flex flex-col items-center gap-2">
-        <span class="text-xs font-bold uppercase tracking-wide text-ink-soft/70">{{
-          i18n.t('onboarding.chooseLanguage')
-        }}</span>
-        <div class="inline-flex overflow-hidden rounded-full border border-line bg-white p-1 shadow-sm">
-          <button
-            type="button"
-            (click)="i18n.setLang('ar')"
-            [attr.aria-pressed]="i18n.lang() === 'ar'"
-            class="rounded-full px-5 py-2 text-sm font-extrabold transition"
-            [class]="i18n.lang() === 'ar' ? 'bg-expo-green text-white' : 'text-ink-soft'"
-          >
-            {{ i18n.t('common.arabic') }}
-          </button>
-          <button
-            type="button"
-            (click)="i18n.setLang('en')"
-            [attr.aria-pressed]="i18n.lang() === 'en'"
-            class="rounded-full px-5 py-2 text-sm font-extrabold transition"
-            [class]="i18n.lang() === 'en' ? 'bg-expo-green text-white' : 'text-ink-soft'"
-          >
-            {{ i18n.t('common.english') }}
-          </button>
-        </div>
-      </div>
-
-      <div class="animate-slide-up text-center">
+    <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-5 pb-10 safe-top">
+      <div class="flex items-center gap-3 pt-4">
         <img
           [src]="logo().src"
           [srcset]="logo().srcset"
@@ -47,9 +23,13 @@ import { categoryEmoji } from '../../shared/format';
           [attr.height]="logo().height"
           [alt]="i18n.t('app.logoAlt')"
           fetchpriority="high"
-          class="mx-auto h-[clamp(2.5rem,11vw,4.5rem)] w-auto max-w-full object-contain"
+          class="h-6 w-auto min-w-0 max-w-full object-contain sm:h-8"
         />
-        <h1 class="mt-5 text-3xl font-black leading-tight">{{ i18n.t('onboarding.welcome') }}</h1>
+        <app-language-switcher class="ms-auto shrink-0" />
+      </div>
+
+      <div class="animate-slide-up mt-8 text-center">
+        <h1 class="text-3xl font-black leading-tight">{{ i18n.t('onboarding.welcome') }}</h1>
         <p class="mt-2 text-sm text-ink-soft">{{ i18n.t('onboarding.subtitle') }}</p>
       </div>
 
@@ -174,7 +154,7 @@ export class OnboardingComponent {
   protected readonly usingRealLocation = signal(false);
   protected readonly locating = signal(false);
   protected readonly submitting = signal(false);
-  protected readonly logo = computed(() => logoAsset(this.i18n.lang(), 'hero'));
+  protected readonly logo = computed(() => logoAsset(this.i18n.lang()));
   protected readonly error = signal('');
   private coords = signal<{ lat: number; lng: number } | null>(null);
 
