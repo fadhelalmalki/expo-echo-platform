@@ -20,7 +20,7 @@ get reminded **10 minutes before** the event starts.
 | ✨ **AI "why this?"** | A short personalized reason per card, generated via **OpenRouter** (Spring AI) with a template fallback so the demo never breaks |
 | ⏱️ **Live countdowns** | "starts in 5 min" with an imminent highlight (≤ 15 min) |
 | 📍 **Proximity** | Haversine distance + walking time; "150 m away" |
-| 🔔 **Smart reminders** | Spring `@Scheduled` + **Server-Sent Events** → browser **Web Notifications** 10 min before start |
+| 🔔 **Smart reminders** | Spring `@Scheduled` + **Server-Sent Events** → browser **Web Notifications** 10 min before start (opt out anytime with **Not now** in Onboarding/Profile) |
 | ✅ **Instant booking** | Confirm/cancel attendance with live seat counts |
 | 🗺️ **Simulation map** | Leaflet map of the Expo site; drag your marker to recompute distances (works anywhere, real GPS optional) |
 | 🌐 **Arabic-first, bilingual** | Full AR (RTL) / EN UI with runtime switch |
@@ -127,7 +127,7 @@ Health check: `GET /actuator/health`.
 ## 🎬 Live demo script (90 seconds)
 
 1. Open the app URL on your phone → it starts in Arabic/RTL.
-2. **Onboarding**: enter a name, tap **Technology + Art**, choose **30 minutes**, enable notifications → *Start exploring*.
+2. **Onboarding**: enter a name, tap **Technology + Art**, choose **30 minutes**, then **Enable notifications** (or **Not now** to skip) → *Start exploring*.
 3. The feed shows a card with a high **Match %**, e.g. **"starts in 5 min · 150 m away"** and an AI line
    *"Strongly matches your interest in Technology, just 150 m away and starts in 5 min."*
 4. Tap **Confirm attendance** → toast + live seat count.
