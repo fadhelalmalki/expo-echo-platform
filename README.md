@@ -15,6 +15,8 @@ scoring every nearby event against the visitor's interests, location and availab
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-4169E1?logo=postgresql&logoColor=white)
 
+[![Live demo](https://img.shields.io/badge/Live%20demo-expo--echo--platform-6DB33F?logo=railway&logoColor=white)](https://expo-echo-platform-production.up.railway.app/)
+
 </div>
 
 ---
@@ -307,6 +309,8 @@ cd frontend && CI=true npm test
    ```
 5. **Generate a public domain** (Settings → Networking → Generate Domain).
 6. Open `https://<your-domain>/` — health check is `GET /actuator/health` (see [`railway.json`](./railway.json)).
+
+**Live instance:** <https://expo-echo-platform-production.up.railway.app/>
 
 ---
 
