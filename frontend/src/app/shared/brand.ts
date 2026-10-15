@@ -21,8 +21,9 @@ interface LogoVariant {
 }
 
 /**
- * Header logos render at a fixed `h-6` (24px) and `sm:h-8` (32px), so the intrinsic width is a constant
- * per breakpoint: height x aspect ratio (en 1286/245, ar 1120/259).
+ * The logo renders at one fixed `h-8` (32px) on every viewport, so its intrinsic width is a constant:
+ * height x aspect ratio (en 1286/245, ar 1120/259). Narrow screens shrink it via `min-w-0` rather than
+ * switching to a smaller asset, which keeps phone and web visually identical.
  *
  * The masters are the top rung rather than a generated file: the original encoders compress better than
  * anything we can resample to, so a generated 1134px/934px rung came out both larger and lower-resolution.
@@ -34,7 +35,7 @@ const VARIANTS: Record<Lang, LogoVariant> = {
       { file: '/en-logo-766.png', width: 766, height: 146 },
       { file: '/en-logo.png', width: 1286, height: 245 },
     ],
-    sizes: '(min-width: 640px) 168px, 126px',
+    sizes: '168px',
   },
   ar: {
     rungs: [
@@ -42,7 +43,7 @@ const VARIANTS: Record<Lang, LogoVariant> = {
       { file: '/ar-logo-623.png', width: 623, height: 144 },
       { file: '/ar-logo.png', width: 1120, height: 259 },
     ],
-    sizes: '(min-width: 640px) 138px, 104px',
+    sizes: '138px',
   },
 };
 

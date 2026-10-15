@@ -23,7 +23,7 @@ import { LanguageSwitcherComponent } from '../shared/language-switcher.component
               [attr.height]="logo().height"
               [alt]="i18n.t('app.logoAlt')"
               fetchpriority="high"
-              class="h-6 w-auto min-w-0 max-w-full object-contain sm:h-8"
+              class="h-8 w-auto min-w-0 max-w-full object-contain"
             />
           </a>
           <app-language-switcher class="shrink-0" />
