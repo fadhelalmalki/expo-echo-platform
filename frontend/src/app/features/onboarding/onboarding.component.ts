@@ -4,6 +4,7 @@ import { I18nService } from '../../core/i18n.service';
 import { ProfileService } from '../../core/profile.service';
 import { NotificationService } from '../../core/notification.service';
 import { ToastService } from '../../core/toast.service';
+import { logoAsset } from '../../shared/brand';
 import { categoryEmoji } from '../../shared/format';
 
 @Component({
@@ -38,7 +39,16 @@ import { categoryEmoji } from '../../shared/format';
       </div>
 
       <div class="animate-slide-up text-center">
-        <img [src]="logoUrl()" [alt]="i18n.t('app.logoAlt')" class="mx-auto h-24 max-w-full w-auto" />
+        <img
+          [src]="logo().src"
+          [srcset]="logo().srcset"
+          [sizes]="logo().sizes"
+          [attr.width]="logo().width"
+          [attr.height]="logo().height"
+          [alt]="i18n.t('app.logoAlt')"
+          fetchpriority="high"
+          class="mx-auto h-[clamp(2.5rem,11vw,4.5rem)] w-auto max-w-full object-contain"
+        />
         <h1 class="mt-5 text-3xl font-black leading-tight">{{ i18n.t('onboarding.welcome') }}</h1>
         <p class="mt-2 text-sm text-ink-soft">{{ i18n.t('onboarding.subtitle') }}</p>
       </div>
@@ -164,7 +174,7 @@ export class OnboardingComponent {
   protected readonly usingRealLocation = signal(false);
   protected readonly locating = signal(false);
   protected readonly submitting = signal(false);
-  protected readonly logoUrl = computed(() => (this.i18n.lang() === 'ar' ? 'ar-logo.png' : 'en-logo.png'));
+  protected readonly logo = computed(() => logoAsset(this.i18n.lang(), 'hero'));
   protected readonly error = signal('');
   private coords = signal<{ lat: number; lng: number } | null>(null);
 

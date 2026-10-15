@@ -80,6 +80,13 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <!-- Spring Boot 4 ships the H2 console auto-configuration in its own
+                 module; without it, spring.h2.console.enabled=true (dev profile)
+                 is silently ignored and /h2-console returns 404. -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-h2console</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
