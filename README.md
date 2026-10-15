@@ -22,7 +22,6 @@ get reminded **10 minutes before** the event starts.
 | 📍 **Proximity** | Haversine distance + walking time; "150 m away" |
 | 🔔 **Smart reminders** | Spring `@Scheduled` + **Server-Sent Events** → browser **Web Notifications** 10 min before start |
 | ✅ **Instant booking** | Confirm/cancel attendance with live seat counts |
-| 🗓️ **Calendar** | One-tap `.ics` download (add to any calendar) |
 | 🗺️ **Simulation map** | Leaflet map of the Expo site; drag your marker to recompute distances (works anywhere, real GPS optional) |
 | 🌐 **Arabic-first, bilingual** | Full AR (RTL) / EN UI with runtime switch |
 | 🎨 **Expo 2030 brand** | Official palette & palm-leaf theme gradients |
@@ -31,7 +30,7 @@ get reminded **10 minutes before** the event starts.
 
 ## 🏗️ Architecture
 
-Single deployable unit — **Spring Boot serves the compiled Angular SPA** (one URL, one QR, no CORS).
+Single deployable unit — **Spring Boot serves the compiled Angular SPA** (one URL, no CORS).
 
 ```
 expo-echo-platform/
@@ -50,7 +49,7 @@ expo-echo-platform/
 ```
 
 **Stack:** Spring Boot 4.1 · Spring AI 2.0 (OpenRouter) · JPA · PostgreSQL (prod) / H2 (dev) ·
-Angular 21 · Tailwind CSS v4 · Leaflet · ZXing (QR).
+Angular 21 · Tailwind CSS v4 · Leaflet.
 
 ---
 
@@ -101,7 +100,7 @@ Copy `.env.example` and fill in as needed.
 
 ---
 
-## ☁️ Deploy to Railway (QR demo)
+## ☁️ Deploy to Railway
 
 1. **Push to GitHub**
    ```bash
@@ -119,10 +118,7 @@ Copy `.env.example` and fill in as needed.
    OPENROUTER_MODEL=openai/gpt-4o-mini
    ```
 5. **Generate a public domain** → *Settings* → *Networking* → *Generate Domain*.
-6. **QR**: open the app on your phone, go to **Profile → Share the app** — the built-in QR
-   encodes the live URL. Or fetch one directly:
-   `https://<your-domain>/api/qr?url=https://<your-domain>&size=512`
-   (`/api/qr` is also usable in any slide/README.)
+6. Open the app on your phone: `https://<your-domain>/`
 
 Health check: `GET /actuator/health`.
 
@@ -130,14 +126,14 @@ Health check: `GET /actuator/health`.
 
 ## 🎬 Live demo script (90 seconds)
 
-1. Scan the QR → app opens in Arabic/RTL on the phone.
+1. Open the app URL on your phone → it starts in Arabic/RTL.
 2. **Onboarding**: enter a name, tap **Technology + Art**, choose **30 minutes**, enable notifications → *Start exploring*.
 3. The feed shows a card with a high **Match %**, e.g. **"starts in 5 min · 150 m away"** and an AI line
    *"Strongly matches your interest in Technology, just 150 m away and starts in 5 min."*
-4. Tap **🗓️** to add to calendar, then **Confirm attendance** → toast + live seat count.
+4. Tap **Confirm attendance** → toast + live seat count.
 5. Open the **Map**, drag your marker → distances update; the nearest list re-ranks.
 6. Wait ~10 s → the **reminder notification** fires (scheduler + SSE + Web Notification).
-7. Switch to **Profile → Share** to show the QR again, or toggle **EN/AR** to show RTL/LTR.
+7. Toggle **EN/AR** in the header to show RTL/LTR.
 
 ---
 
@@ -154,8 +150,6 @@ Health check: `GET /actuator/health`.
 | `POST` / `DELETE` / `GET` | `/api/bookings` | Book / cancel / list |
 | `GET` | `/api/notifications?visitorId=` | Reminder history |
 | `GET` | `/api/notifications/stream?visitorId=` | **SSE** live reminders |
-| `GET` | `/api/events/{id}/calendar.ics` | Calendar invite |
-| `GET` | `/api/qr?url=&size=` | QR code PNG |
 
 ---
 

@@ -80,14 +80,6 @@ import { categoryEmoji, timeLabel } from '../../shared/format';
                   <app-countdown [startAt]="booking.startAt" />
                 </span>
                 <div class="flex items-center gap-2">
-                  <button
-                    type="button"
-                    (click)="addToCalendar(booking)"
-                    class="rounded-full border border-line p-2 text-lg"
-                    [attr.aria-label]="i18n.t('bookings.addToCalendar')"
-                  >
-                    🗓️
-                  </button>
                   @if (booking.status === 'CONFIRMED') {
                     <button
                       type="button"
@@ -149,10 +141,6 @@ export class BookingsComponent implements OnInit {
       },
       error: () => this.toast.show(this.i18n.t('common.error'), 'error'),
     });
-  }
-
-  protected addToCalendar(booking: Booking): void {
-    window.open(this.api.calendarUrl(booking.eventId), '_blank');
   }
 
   protected goToFeed(): void {

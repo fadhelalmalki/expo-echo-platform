@@ -144,17 +144,6 @@ import { categoryEmoji, initials } from '../../shared/format';
       </div>
     </section>
 
-    <section class="card mt-4 p-4 text-center">
-      <h2 class="text-sm font-extrabold text-ink-soft">📱 {{ i18n.t('profile.shareQr') }}</h2>
-      <img
-        [src]="qrUrl()"
-        alt="QR code"
-        class="mx-auto mt-3 h-44 w-44 rounded-2xl border border-line"
-      />
-      <p class="mt-2 break-all text-xs text-ink-soft">{{ shareUrl() }}</p>
-      <p class="mt-1 text-[11px] text-ink-soft/70">{{ i18n.t('profile.shareHint') }}</p>
-    </section>
-
     <button
       type="button"
       (click)="save()"
@@ -202,14 +191,6 @@ export class ProfileComponent {
       return '';
     }
     return `${v.latitude.toFixed(3)}, ${v.longitude.toFixed(3)}`;
-  }
-
-  protected shareUrl(): string {
-    return typeof window === 'undefined' ? '' : window.location.origin;
-  }
-
-  protected qrUrl(): string {
-    return `/api/qr?url=${encodeURIComponent(this.shareUrl())}&size=240`;
   }
 
   protected toggle(code: string): void {

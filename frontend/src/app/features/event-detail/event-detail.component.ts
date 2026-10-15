@@ -68,23 +68,14 @@ interface BreakdownRow {
           }
         </div>
 
-        <div class="mt-4 grid grid-cols-2 gap-3">
-          <button
-            type="button"
-            (click)="toggleBooking(c)"
-            class="rounded-2xl py-3.5 text-sm font-extrabold text-white shadow-md transition active:scale-[0.98]"
-            [style.background]="c.booked ? '#006c35' : 'linear-gradient(135deg, ' + c.category.colorStart + ', ' + c.category.colorEnd + ')'"
-          >
-            {{ c.booked ? '✓ ' + i18n.t('detail.booked') : i18n.t('detail.book') }}
-          </button>
-          <button
-            type="button"
-            (click)="addToCalendar(c)"
-            class="rounded-2xl border border-line bg-white py-3.5 text-sm font-extrabold text-ink-soft"
-          >
-            🗓️ {{ i18n.t('detail.addToCalendar') }}
-          </button>
-        </div>
+        <button
+          type="button"
+          (click)="toggleBooking(c)"
+          class="mt-4 w-full rounded-2xl py-3.5 text-sm font-extrabold text-white shadow-md transition active:scale-[0.98]"
+          [style.background]="c.booked ? '#006c35' : 'linear-gradient(135deg, ' + c.category.colorStart + ', ' + c.category.colorEnd + ')'"
+        >
+          {{ c.booked ? '✓ ' + i18n.t('detail.booked') : i18n.t('detail.book') }}
+        </button>
 
         <section class="card mt-4 p-4">
           <h2 class="text-sm font-extrabold text-expo-green">✨ {{ i18n.t('detail.whyThisMatch') }}</h2>
@@ -237,10 +228,6 @@ export class EventDetailComponent implements OnInit {
         error: () => this.toast.show(this.i18n.t('common.error'), 'error'),
       });
     }
-  }
-
-  protected addToCalendar(c: EventCard): void {
-    window.open(this.api.calendarUrl(c.id), '_blank');
   }
 
   protected back(): void {

@@ -65,7 +65,6 @@ import { EventCardComponent } from '../../shared/event-card.component';
             (book)="book($event)"
             (cancel)="cancel($event)"
             (open)="openDetail($event)"
-            (calendar)="addToCalendar($event)"
           />
         }
       </div>
@@ -159,10 +158,6 @@ export class FeedComponent implements OnInit {
 
   protected openDetail(card: EventCard): void {
     this.router.navigate(['/events', card.id]);
-  }
-
-  protected addToCalendar(card: EventCard): void {
-    window.open(this.api.calendarUrl(card.id), '_blank');
   }
 
   private updateCard(id: number, patch: (card: EventCard) => EventCard): void {

@@ -76,14 +76,6 @@ import { categoryEmoji, distanceLabel, gradient } from './format';
             }
           </span>
           <div class="flex items-center gap-2">
-            <button
-              type="button"
-              (click)="calendar.emit(card()); $event.stopPropagation()"
-              class="rounded-full border border-line p-2 text-lg"
-              [attr.aria-label]="i18n.t('feed.addCalendar')"
-            >
-              🗓️
-            </button>
             @if (card().booked) {
               <button
                 type="button"
@@ -116,7 +108,6 @@ export class EventCardComponent {
   readonly book = output<EventCard>();
   readonly cancel = output<EventCard>();
   readonly open = output<EventCard>();
-  readonly calendar = output<EventCard>();
 
   protected readonly title = computed(() =>
     this.i18n.lang() === 'ar' ? this.card().titleAr : this.card().titleEn,

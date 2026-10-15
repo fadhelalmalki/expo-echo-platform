@@ -87,8 +87,4 @@ export class ApiService {
   getNotifications(visitorId: string): Observable<AppNotification[]> {
     return this.http.get<AppNotification[]>(`${this.base}/notifications`, { params: { visitorId } });
   }
-
-  calendarUrl(eventId: number): string {
-    return `${this.base}/events/${eventId}/calendar.ics`;
-  }
 }
