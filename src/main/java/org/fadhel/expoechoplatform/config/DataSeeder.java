@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.fadhel.expoechoplatform.domain.Category;
 import org.fadhel.expoechoplatform.domain.Event;
 import org.fadhel.expoechoplatform.domain.Venue;
-import org.fadhel.expoechoplatform.repository.CategoryRepository;
-import org.fadhel.expoechoplatform.repository.EventRepository;
-import org.fadhel.expoechoplatform.repository.VenueRepository;
+import org.fadhel.expoechoplatform.repository.*;
 import org.fadhel.expoechoplatform.util.GeoUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -27,9 +25,12 @@ public class DataSeeder implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final VenueRepository venueRepository;
     private final EventRepository eventRepository;
+    private final BookingRepository bookingRepository;
+    private final AppNotificationRepository appNotificationRepository;
     private final AppProperties props;
 
     private static final double EARTH_LAT_METERS = 111_320d;
+    private static final double MAX_CENTER_DRIFT_METERS = 1000d;
 
     @Override
     @Transactional
@@ -41,8 +42,33 @@ public class DataSeeder implements CommandLineRunner {
         if (categoryRepository.count() == 0) {
             seedCategories();
         }
-        List<Venue> venues = venueRepository.count() == 0 ? seedVenues() : venueRepository.findAll();
-        if (eventRepository.count() == 0) {
+        List<Venue> venues = venueRepository.findAll();
+        boolean needsReseed = venues.isEmpty();
+        if (!needsReseed) {
+            double siteLat = props.getSite().getCenterLat();
+            double siteLng = props.getSite().getCenterLng();
+            double maxDist = 0d;
+            for (Venue v : venues) {
+                double dist = GeoUtils.haversineMeters(siteLat, siteLng, v.getLatitude(), v.getLongitude());
+                if (dist > maxDist) {
+                    maxDist = dist;
+                }
+            }
+            if (maxDist > MAX_CENTER_DRIFT_METERS) {
+                needsReseed = true;
+                log.warn("Detected venue center drift (max {} m from configured site center). Re-seeding demo data.", (long) maxDist);
+            }
+        }
+        if (needsReseed) {
+            if (bookingRepository.count() > 0 || appNotificationRepository.count() > 0) {
+                appNotificationRepository.deleteAllInBatch();
+                bookingRepository.deleteAllInBatch();
+            }
+            eventRepository.deleteAllInBatch();
+            venueRepository.deleteAllInBatch();
+            venues = seedVenues();
+            seedEvents(venues);
+        } else if (eventRepository.count() == 0) {
             seedEvents(venues);
         }
         ensureRollingEvents();
