@@ -13,24 +13,26 @@ import { LanguageSwitcherComponent } from '../../shared/language-switcher.compon
   standalone: true,
   imports: [LanguageSwitcherComponent],
   template: `
-    <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-5 pb-10 safe-top">
-      <div class="flex items-center gap-3 pt-4">
-        <img
-          [src]="logo().src"
-          [srcset]="logo().srcset"
-          [sizes]="logo().sizes"
-          [attr.width]="logo().width"
-          [attr.height]="logo().height"
-          [alt]="i18n.t('app.logoAlt')"
-          fetchpriority="high"
-          class="h-8 w-auto min-w-0 max-w-full object-contain"
-        />
-        <app-language-switcher class="ms-auto shrink-0" />
-      </div>
+    <div class="mx-auto flex min-h-dvh w-full max-w-2xl flex-col px-5 pb-10">
+      <header class="glass safe-top sticky top-0 z-40 -mx-5 border-b border-line/70">
+        <div class="flex items-center gap-3 px-5 py-2.5">
+          <img
+            [src]="logo().src"
+            [srcset]="logo().srcset"
+            [sizes]="logo().sizes"
+            [attr.width]="logo().width"
+            [attr.height]="logo().height"
+            [alt]="i18n.t('app.logoAlt')"
+            fetchpriority="high"
+            class="h-8 w-auto min-w-0 max-w-full object-contain"
+          />
+          <app-language-switcher class="ms-auto shrink-0" />
+        </div>
+      </header>
 
-      <div class="animate-slide-up mt-8 text-center">
-        <h1 class="text-3xl font-black leading-tight">{{ i18n.t('onboarding.welcome') }}</h1>
-        <p class="mt-2 text-sm text-ink-soft">{{ i18n.t('onboarding.subtitle') }}</p>
+      <div class="animate-slide-up mt-6">
+        <h1 class="text-2xl font-black">{{ i18n.t('onboarding.welcome') }}</h1>
+        <p class="mt-0.5 text-sm text-ink-soft">{{ i18n.t('onboarding.subtitle') }}</p>
       </div>
 
       <section class="mt-7">
