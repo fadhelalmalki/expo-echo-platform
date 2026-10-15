@@ -113,13 +113,32 @@ import { LanguageSwitcherComponent } from '../../shared/language-switcher.compon
         </div>
         <div class="mt-3 flex items-center justify-between gap-3 border-t border-line pt-3">
           <p class="text-sm font-bold">🔔 {{ i18n.t('notif.enable') }}</p>
-          <button
-            type="button"
-            (click)="enableNotifications()"
-            class="rounded-full border border-line px-3 py-2 text-xs font-bold text-ink-soft"
-          >
-            {{ notifications.permission() === 'granted' ? '✓' : i18n.t('notif.enable') }}
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              (click)="enableNotifications()"
+              class="rounded-full border px-3 py-2 text-xs font-bold transition"
+              [class]="
+                notifications.muted()
+                  ? 'border-line text-ink-soft'
+                  : 'border-expo-green bg-expo-green text-white'
+              "
+            >
+              {{ notifications.permission() === 'granted' && !notifications.muted() ? '✓' : i18n.t('notif.enable') }}
+            </button>
+            <button
+              type="button"
+              (click)="skipNotifications()"
+              class="rounded-full border px-3 py-2 text-xs font-bold transition"
+              [class]="
+                notifications.muted()
+                  ? 'border-expo-red bg-expo-red text-white'
+                  : 'border-line text-ink-soft'
+              "
+            >
+              {{ i18n.t('notif.skip') }}
+            </button>
+          </div>
         </div>
       </section>
 
@@ -196,11 +215,17 @@ export class OnboardingComponent {
   }
 
   protected async enableNotifications(): Promise<void> {
+    this.notifications.setMuted(false);
     const result = await this.notifications.requestPermission();
     this.toast.show(
       result === 'granted' ? this.i18n.t('notif.enabled') : this.i18n.t('notif.denied'),
       result === 'granted' ? 'success' : 'info',
     );
+  }
+
+  protected skipNotifications(): void {
+    this.notifications.setMuted(true);
+    this.toast.show(this.i18n.t('notif.muted'), 'info');
   }
 
   protected async submit(): Promise<void> {

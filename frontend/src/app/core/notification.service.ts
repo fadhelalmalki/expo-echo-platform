@@ -15,6 +15,9 @@ export class NotificationService {
   );
   readonly reminders = signal<AppNotification[]>([]);
   readonly connected = signal(false);
+  readonly muted = signal(
+    typeof localStorage !== 'undefined' && localStorage.getItem('expoecho.notifMuted') === '1',
+  );
 
   private source: EventSource | null = null;
   private visitorId: string | null = null;
@@ -44,10 +47,25 @@ export class NotificationService {
     this.connected.set(false);
   }
 
+  setMuted(value: boolean): void {
+    this.muted.set(value);
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    if (value) {
+      localStorage.setItem('expoecho.notifMuted', '1');
+    } else {
+      localStorage.removeItem('expoecho.notifMuted');
+    }
+  }
+
   private onReminder(event: MessageEvent): void {
     try {
       const payload: AppNotification = JSON.parse(event.data);
       this.reminders.update((list) => [payload, ...list.filter((r) => r.id !== payload.id)]);
+      if (this.muted()) {
+        return;
+      }
       const isAr = this.i18n.lang() === 'ar';
       const title = isAr ? payload.titleAr : payload.titleEn;
       const body = isAr ? payload.messageAr : payload.messageEn;

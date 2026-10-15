@@ -101,19 +101,42 @@ import { categoryEmoji, initials } from '../../shared/format';
           🔔 {{ i18n.t('profile.notifications') }}
           <span class="block text-xs font-medium text-ink-soft">
             {{
-              notifications.permission() === 'granted'
-                ? i18n.t('profile.notifOn')
-                : i18n.t('profile.notifOff')
+              notifications.muted()
+                ? i18n.t('notif.muted')
+                : notifications.permission() === 'granted'
+                  ? i18n.t('profile.notifOn')
+                  : i18n.t('profile.notifOff')
             }}
           </span>
         </span>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center justify-end gap-2">
           <button
             type="button"
             (click)="enableNotifications()"
-            class="rounded-full border border-line px-3 py-1.5 text-xs font-bold text-ink-soft"
+            class="rounded-full border px-3 py-1.5 text-xs font-bold transition"
+            [class]="
+              notifications.muted()
+                ? 'border-line text-ink-soft'
+                : 'border-expo-green bg-expo-green text-white'
+            "
           >
-            {{ i18n.t('notif.enable') }}
+            {{
+              notifications.permission() === 'granted' && !notifications.muted()
+                ? '✓'
+                : i18n.t('notif.enable')
+            }}
+          </button>
+          <button
+            type="button"
+            (click)="skipNotifications()"
+            class="rounded-full border px-3 py-1.5 text-xs font-bold transition"
+            [class]="
+              notifications.muted()
+                ? 'border-expo-red bg-expo-red text-white'
+                : 'border-line text-ink-soft'
+            "
+          >
+            {{ i18n.t('notif.skip') }}
           </button>
           <button
             type="button"
@@ -204,11 +227,17 @@ export class ProfileComponent {
   }
 
   protected async enableNotifications(): Promise<void> {
+    this.notifications.setMuted(false);
     const result = await this.notifications.requestPermission();
     this.toast.show(
       result === 'granted' ? this.i18n.t('notif.enabled') : this.i18n.t('notif.denied'),
       result === 'granted' ? 'success' : 'info',
     );
+  }
+
+  protected skipNotifications(): void {
+    this.notifications.setMuted(true);
+    this.toast.show(this.i18n.t('notif.muted'), 'info');
   }
 
   protected useMyLocation(): void {
