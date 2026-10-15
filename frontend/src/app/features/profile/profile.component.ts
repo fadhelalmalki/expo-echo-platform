@@ -148,22 +148,15 @@ import { categoryEmoji, initials } from '../../shared/format';
         </div>
       </div>
 
-      <div class="flex items-center justify-between p-4">
+      <div class="p-4">
         <span class="text-sm font-bold">
           📍 {{ i18n.t('profile.location') }}
           <span class="block text-xs font-medium text-ink-soft">
-            @if (profile.visitor()?.latitude !== null) {
-              {{ coordsLabel() }}
+            @if (profile.visitor()) {
+              {{ atExpoSite() ? i18n.t('onboarding.atExpoSite') : coordsLabel() }}
             }
           </span>
         </span>
-        <button
-          type="button"
-          (click)="useMyLocation()"
-          class="rounded-full border border-line px-3 py-1.5 text-xs font-bold text-ink-soft"
-        >
-          {{ i18n.t('onboarding.useMyLocation') }}
-        </button>
       </div>
     </section>
 
@@ -216,6 +209,15 @@ export class ProfileComponent {
     return `${v.latitude.toFixed(3)}, ${v.longitude.toFixed(3)}`;
   }
 
+  protected atExpoSite(): boolean {
+    const v = this.profile.visitor();
+    const center = this.profile.config()?.siteCenter;
+    if (v?.latitude == null || v?.longitude == null || !center) {
+      return false;
+    }
+    return Math.abs(v.latitude - center.lat) < 1e-6 && Math.abs(v.longitude - center.lng) < 1e-6;
+  }
+
   protected toggle(code: string): void {
     const next = new Set(this.selected());
     if (next.has(code)) {
@@ -238,16 +240,6 @@ export class ProfileComponent {
   protected skipNotifications(): void {
     this.notifications.setMuted(true);
     this.toast.show(this.i18n.t('notif.muted'), 'info');
-  }
-
-  protected useMyLocation(): void {
-    if (!navigator.geolocation) {
-      return;
-    }
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.profile.setLocalLocation(position.coords.latitude, position.coords.longitude);
-      this.toast.show(this.i18n.t('profile.location'), 'info');
-    });
   }
 
   protected async save(): Promise<void> {

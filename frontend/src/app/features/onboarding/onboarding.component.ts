@@ -95,21 +95,9 @@ import { LanguageSwitcherComponent } from '../../shared/language-switcher.compon
       </section>
 
       <section class="mt-6 rounded-2xl border border-line bg-white p-4">
-        <div class="flex items-center justify-between gap-3">
-          <div>
-            <p class="text-sm font-bold">📍 {{ i18n.t('profile.location') }}</p>
-            <p class="mt-0.5 text-xs text-ink-soft">
-              {{ usingRealLocation() ? i18n.t('onboarding.useMyLocation') : i18n.t('onboarding.atExpoSite') }}
-            </p>
-          </div>
-          <button
-            type="button"
-            (click)="useMyLocation()"
-            [disabled]="locating()"
-            class="rounded-full border border-line px-3 py-2 text-xs font-bold text-ink-soft disabled:opacity-50"
-          >
-            {{ locating() ? i18n.t('onboarding.locating') : i18n.t('onboarding.useMyLocation') }}
-          </button>
+        <div>
+          <p class="text-sm font-bold">📍 {{ i18n.t('profile.location') }}</p>
+          <p class="mt-0.5 text-xs text-ink-soft">{{ i18n.t('onboarding.atExpoSite') }}</p>
         </div>
         <div class="mt-3 flex items-center justify-between gap-3 border-t border-line pt-3">
           <p class="text-sm font-bold">🔔 {{ i18n.t('notif.enable') }}</p>
@@ -172,12 +160,9 @@ export class OnboardingComponent {
   protected readonly name = signal('');
   protected readonly selected = signal<Set<string>>(new Set<string>());
   protected readonly availableMinutes = signal(30);
-  protected readonly usingRealLocation = signal(false);
-  protected readonly locating = signal(false);
   protected readonly submitting = signal(false);
   protected readonly logo = computed(() => logoAsset(this.i18n.lang()));
   protected readonly error = signal('');
-  private coords = signal<{ lat: number; lng: number } | null>(null);
 
   protected readonly siteCenter = computed(() => this.profile.config()?.siteCenter);
 
@@ -193,25 +178,6 @@ export class OnboardingComponent {
       next.add(code);
     }
     this.selected.set(next);
-  }
-
-  protected useMyLocation(): void {
-    if (!navigator.geolocation) {
-      return;
-    }
-    this.locating.set(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.coords.set({ lat: position.coords.latitude, lng: position.coords.longitude });
-        this.usingRealLocation.set(true);
-        this.locating.set(false);
-      },
-      () => {
-        this.locating.set(false);
-        this.toast.show(this.i18n.t('onboarding.atExpoSite'), 'info');
-      },
-      { enableHighAccuracy: true, timeout: 8000 },
-    );
   }
 
   protected async enableNotifications(): Promise<void> {
@@ -240,14 +206,13 @@ export class OnboardingComponent {
     }
     this.submitting.set(true);
     const center = this.siteCenter() ?? { lat: 24.878738040594087, lng: 46.70069308320736 };
-    const location = this.coords() ?? center;
     try {
       await this.profile.createProfile({
         displayName: this.name().trim(),
         interestCodes: [...this.selected()],
         availableMinutes: this.availableMinutes(),
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: center.lat,
+        longitude: center.lng,
       });
       this.router.navigateByUrl('/feed');
     } catch {
