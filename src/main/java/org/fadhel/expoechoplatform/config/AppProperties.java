@@ -23,8 +23,8 @@ public class AppProperties {
     @Getter
     @Setter
     public static class Site {
-        private double centerLat = 24.7690;
-        private double centerLng = 46.6580;
+        private double centerLat = 24.878738040594087;
+        private double centerLng = 46.70069308320736;
     }
 
     @Getter

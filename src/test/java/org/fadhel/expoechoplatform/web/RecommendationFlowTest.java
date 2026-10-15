@@ -1,5 +1,6 @@
 package org.fadhel.expoechoplatform.web;
 
+import org.fadhel.expoechoplatform.config.AppProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,17 +19,24 @@ class RecommendationFlowTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private AppProperties props;
+
     @Test
     void visitorCanGetRecommendationsAndBook() throws Exception {
+        // Stand at the configured site center: seeded venues are generated around it,
+        // so a hard-coded location would drift whenever the center moves.
+        double lat = props.getSite().getCenterLat();
+        double lng = props.getSite().getCenterLng();
         String visitorJson = """
                 {
                   "displayName": "Integration Tester",
                   "interestCodes": ["TECHNOLOGY", "ART"],
                   "availableMinutes": 60,
-                  "latitude": 24.7690,
-                  "longitude": 46.6580
+                  "latitude": %s,
+                  "longitude": %s
                 }
-                """;
+                """.formatted(lat, lng);
 
         String created = mockMvc.perform(post("/api/visitors")
                         .contentType(MediaType.APPLICATION_JSON)

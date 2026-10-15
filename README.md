@@ -93,7 +93,7 @@ Copy `.env.example` and fill in as needed.
 | `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | Any OpenRouter model id |
 | `AI_ENABLED` | `false` | Set `true` to turn on AI reasons (needs the key) |
 | `PGHOST` / `PGPORT` / `PGUSER` / `PGPASSWORD` / `PGDATABASE` | – | Provided automatically by the Railway Postgres plugin |
-| `SITE_CENTER_LAT` / `SITE_CENTER_LNG` | Expo site | Center used for the simulated venue map |
+| `SITE_CENTER_LAT` / `SITE_CENTER_LNG` | `24.878738040594087` / `46.70069308320736` | Center used for the simulated venue map |
 
 > The app works **without** AI — scoring is deterministic and reasons fall back to templates.
 > Set `AI_ENABLED=true` + `OPENROUTER_API_KEY` to add live AI wording.

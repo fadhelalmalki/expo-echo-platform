@@ -214,7 +214,7 @@ export class OnboardingComponent {
       return;
     }
     this.submitting.set(true);
-    const center = this.siteCenter() ?? { lat: 24.769, lng: 46.658 };
+    const center = this.siteCenter() ?? { lat: 24.878738040594087, lng: 46.70069308320736 };
     const location = this.coords() ?? center;
     try {
       await this.profile.createProfile({

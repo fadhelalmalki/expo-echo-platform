@@ -35,8 +35,8 @@ app:
   ai:
     enabled: ${AI_ENABLED:true}
   site:
-    center-lat: ${SITE_CENTER_LAT:24.7690}
-    center-lng: ${SITE_CENTER_LNG:46.6580}
+    center-lat: ${SITE_CENTER_LAT:24.878738040594087}
+    center-lng: ${SITE_CENTER_LNG:46.70069308320736}
   recommendation:
     default-radius-meters: 600
     max-radius-meters: 3000

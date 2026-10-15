@@ -87,7 +87,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private initMap(): void {
-    const center = this.profile.config()?.siteCenter ?? { lat: 24.769, lng: 46.658 };
+    const center = this.profile.config()?.siteCenter ?? { lat: 24.878738040594087, lng: 46.70069308320736 };
     this.radius.set(this.profile.config()?.defaultRadiusMeters ?? 600);
     const visitor = this.profile.visitor();
     const start = {
