@@ -57,7 +57,9 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'map.title': 'خريطة موقع إكسبو',
     'map.hint': 'اسحب مؤشر موقعك لتحديث المسافات',
     'map.you': 'موقعك',
-    'map.event': 'فعالية',
+    'map.event': 'الفعاليات',
+    'map.eventsByCategory': 'الفعاليات (حسب التصنيف)',
+    'map.nearest': 'أقرب الفعاليات',
     'map.recenter': 'إعادة التمركز',
     'map.legend': 'الأساطير',
 
@@ -177,7 +179,9 @@ const TRANSLATIONS: Record<Lang, Dict> = {
     'map.title': 'Expo site map',
     'map.hint': 'Drag your marker to update distances',
     'map.you': 'You',
-    'map.event': 'Event',
+    'map.event': 'Events',
+    'map.eventsByCategory': 'Events (by category)',
+    'map.nearest': 'Nearest events',
     'map.recenter': 'Recenter',
     'map.legend': 'Legend',
 

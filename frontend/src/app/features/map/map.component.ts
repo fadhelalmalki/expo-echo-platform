@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { ApiService } from '../../core/api.service';
@@ -20,13 +20,15 @@ import { categoryEmoji, distanceLabel } from '../../shared/format';
       <div id="expo-map" class="h-[52vh] w-full"></div>
     </div>
 
-    <div class="mt-3 flex items-center gap-3 text-xs font-semibold text-ink-soft">
+    <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-ink-soft">
       <span class="inline-flex items-center gap-1.5">
         <span class="h-3 w-3 rounded-full bg-expo-purple"></span>{{ i18n.t('map.you') }}
       </span>
-      <span class="inline-flex items-center gap-1.5">
-        <span class="h-3 w-3 rounded-full bg-expo-gold"></span>{{ i18n.t('map.event') }}
-      </span>
+      @for (cat of legendCategories(); track cat.code) {
+        <span class="inline-flex items-center gap-1.5">
+          <span class="h-3 w-3 rounded-full" [style.background]="cat.color"></span>{{ cat.label }}
+        </span>
+      }
       <button
         type="button"
         (click)="toggleRadius()"
@@ -37,10 +39,17 @@ import { categoryEmoji, distanceLabel } from '../../shared/format';
     </div>
 
     <div class="mt-4 space-y-2">
-      @for (card of nearest(); track card.id) {
+      @if (shown().length > 0) {
+        <p class="px-1 text-xs font-bold text-ink-soft">
+          {{ i18n.t('map.nearest') }}<span class="mx-1">•</span>{{ shown().length }}
+        </p>
+      }
+      @for (card of shown(); track card.id) {
         <button
           type="button"
           (click)="openDetail(card)"
+          (mouseenter)="focus(card.id)"
+          (mouseleave)="blur(card.id)"
           class="card flex w-full items-center gap-3 p-3 text-start"
         >
           <span
@@ -57,6 +66,12 @@ import { categoryEmoji, distanceLabel } from '../../shared/format';
           </span>
           <span class="text-lg text-ink-soft">›</span>
         </button>
+      } @empty {
+        <div class="card p-6 text-center">
+          <p class="text-3xl">🧭</p>
+          <p class="mt-2 text-sm font-bold">{{ i18n.t('feed.noResults') }}</p>
+          <p class="mt-1 text-xs text-ink-soft">{{ i18n.t('feed.noResultsHint') }}</p>
+        </div>
       }
     </div>
   `,
@@ -74,6 +89,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private visitorMarker?: L.Marker;
   private radiusCircle?: L.Circle;
   private eventLayer?: L.LayerGroup;
+  private readonly markers = new Map<number, L.Marker>();
 
   ngAfterViewInit(): void {
     if (typeof window === 'undefined') {
@@ -126,9 +142,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!id || !this.map) {
       return;
     }
-    this.api.getRecommendations(id, 120, undefined, 40).subscribe((response) => {
-      this.cards.set(response.cards);
-      this.renderEvents(response.cards);
+    this.api.getRecommendations(id, 120, this.radius(), 40).subscribe((response) => {
+      const radius = this.radius();
+      // Keep the map truthful to the circle: drop anything the server relaxed back in.
+      const cards = response.cards.filter(
+        (c) => c.distanceMeters == null || c.distanceMeters <= radius,
+      );
+      this.cards.set(cards);
+      this.renderEvents(cards);
       this.fitBounds();
     });
   }
@@ -138,6 +159,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.eventLayer.clearLayers();
+    this.markers.clear();
     for (const card of cards) {
       const marker = L.marker([card.venue.latitude, card.venue.longitude], {
         icon: this.dotIcon(card.category.colorStart, categoryEmoji(card.category.code)),
@@ -148,6 +170,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       );
       marker.on('click', () => this.router.navigate(['/events', card.id]));
       marker.addTo(this.eventLayer);
+      this.markers.set(card.id, marker);
     }
   }
 
@@ -169,12 +192,48 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const next = options[(current + 1) % options.length];
     this.radius.set(next);
     this.radiusCircle?.setRadius(next);
+    this.loadEvents();
   }
 
-  protected nearest(): EventCard[] {
-    return [...this.cards()]
-      .sort((a, b) => (a.distanceMeters ?? 1e9) - (b.distanceMeters ?? 1e9))
-      .slice(0, 6);
+  protected readonly shown = computed(() =>
+    [...this.cards()].sort((a, b) => (a.distanceMeters ?? 1e9) - (b.distanceMeters ?? 1e9)),
+  );
+
+  protected readonly legendCategories = computed(() => {
+    const seen = new Set<string>();
+    const legend: { code: string; color: string; label: string }[] = [];
+    const arabic = this.i18n.lang() === 'ar';
+    for (const card of this.cards()) {
+      const category = card.category;
+      if (!category || seen.has(category.code)) {
+        continue;
+      }
+      seen.add(category.code);
+      legend.push({
+        code: category.code,
+        color: category.colorStart,
+        label: arabic ? category.nameAr : category.nameEn,
+      });
+    }
+    return legend;
+  });
+
+  protected focus(id: number): void {
+    const marker = this.markers.get(id);
+    if (!marker) {
+      return;
+    }
+    marker.setZIndexOffset(1000);
+    marker.openTooltip();
+  }
+
+  protected blur(id: number): void {
+    const marker = this.markers.get(id);
+    if (!marker) {
+      return;
+    }
+    marker.setZIndexOffset(0);
+    marker.closeTooltip();
   }
 
   protected openDetail(card: EventCard): void {

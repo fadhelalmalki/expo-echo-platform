@@ -45,13 +45,16 @@ interface BreakdownRow {
                 📍 {{ venueName(c) }}<span class="mx-1">•</span>{{ time(c) }}
               </p>
             </div>
-            <div class="rounded-full bg-white/15 p-1">
-              <app-match-ring
-                [score]="c.matchScore"
-                colorStart="#ffffff"
-                colorEnd="#ffffff"
-                [size]="66"
-              />
+            <div class="flex shrink-0 flex-col items-center gap-1">
+              <div class="rounded-full bg-white/15 p-1">
+                <app-match-ring
+                  [score]="c.matchScore"
+                  colorStart="#ffffff"
+                  colorEnd="#ffffff"
+                  [size]="66"
+                />
+              </div>
+              <span class="text-[10px] font-bold text-white/90">{{ i18n.t('detail.score') }}</span>
             </div>
           </div>
         </div>
@@ -63,7 +66,7 @@ interface BreakdownRow {
           @if (c.distanceMeters !== null) {
             <span class="rounded-full bg-mist px-3 py-1.5 text-ink-soft">🚶 {{ dist(c) }}</span>
             <span class="rounded-full bg-mist px-3 py-1.5 text-ink-soft">
-              ⏱️ {{ c.walkMinutes }} {{ i18n.t('common.minutesShort') }} {{ i18n.t('detail.gettingThere') }}
+              ⏱️ {{ c.walkMinutes }} {{ i18n.t('feed.walkMin') }}
             </span>
           }
         </div>

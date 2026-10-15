@@ -24,12 +24,19 @@ import { categoryEmoji, distanceLabel, gradient } from './format';
             <span>{{ emoji() }}</span>
             <span>{{ categoryName() }}</span>
           </div>
-          <app-match-ring
-            [score]="card().matchScore"
-            [colorStart]="card().category.colorStart"
-            [colorEnd]="card().category.colorEnd"
-            [size]="56"
-          />
+          <div
+            class="flex shrink-0 flex-col items-center gap-1"
+            role="img"
+            [attr.aria-label]="i18n.t('detail.score') + ' ' + card().matchScore + '%'"
+          >
+            <app-match-ring
+              [score]="card().matchScore"
+              [colorStart]="card().category.colorStart"
+              [colorEnd]="card().category.colorEnd"
+              [size]="56"
+            />
+            <span class="text-[10px] font-bold text-ink-soft">{{ i18n.t('detail.score') }}</span>
+          </div>
         </div>
 
         <h3 class="mt-3 text-lg font-extrabold leading-snug">{{ title() }}</h3>
@@ -53,7 +60,7 @@ import { categoryEmoji, distanceLabel, gradient } from './format';
               🚶 {{ distanceText() }}
             </span>
             <span class="inline-flex items-center rounded-full bg-mist px-2.5 py-1 text-ink-soft">
-              {{ card().walkMinutes }} {{ i18n.t('common.minutesShort') }} {{ i18n.t('feed.walkMin') }}
+              {{ card().walkMinutes }} {{ i18n.t('feed.walkMin') }}
             </span>
           }
         </div>
