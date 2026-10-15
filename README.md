@@ -33,11 +33,7 @@ scoring every nearby event against the visitor's interests, location and availab
 - [Testing](#testing)
 - [Deployment (Railway)](#deployment-railway)
 - [Demo script (90 seconds)](#demo-script-90-seconds)
-- [Troubleshooting](#troubleshooting)
 - [Project structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
 
 ---
 
